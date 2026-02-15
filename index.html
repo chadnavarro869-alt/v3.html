@@ -275,13 +275,15 @@ input,select{
     }
     return best;
   };
+  
+  // Don't overwrite controls while user is editing them
+const activeId = document.activeElement && document.activeElement.id;
 
-  const scheduleNext=(why="start")=>{
-    s.baseMinutes=Number($("baseInterval").value||60);
-    s.lagMinutes=Number($("lagWindow").value||5);
-    s.packPrice=Number($("packPrice").value||10);
-    s.cigsPerPack=Number($("cigsPerPack").value||20);
-
+if (activeId !== "baseInterval") $("baseInterval").value = String(s.baseMinutes ?? 60);
+if (activeId !== "lagWindow")    $("lagWindow").value   = String(s.lagMinutes ?? 5);
+if (activeId !== "packPrice")    $("packPrice").value   = String(s.packPrice ?? 10);
+if (activeId !== "cigsPerPack")  $("cigsPerPack").value = String(s.cigsPerPack ?? 20);
+    
     const jitter=(Math.random()*2-1)*s.lagMinutes;
     const minutes=Math.max(5, s.baseMinutes + jitter);
     const ms=Math.round(minutes*60*1000);
